@@ -25,6 +25,14 @@ Includes individual renderings of each celestial body, excluding the asteroid be
 - **Modular code structure:** each celestial body is defined in a separate file for maintainability.
 - **Explore individual celestial bodies:** Each planet and moon can be isolated for detailed viewing, with adjustable size and orbital speed for experimentation.
 
+# Demo
+
+![Solar System Animation](Sgif.gif)
+
+![Earth Close-up](Screenshot1.png)
+
+![Earth Far-away](Screenshot2.png)
+
 # Tech Stack
 
 - JavaScript
