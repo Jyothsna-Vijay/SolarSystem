@@ -173,7 +173,7 @@ scene.add(plutoGroup, getOrbit(48));
 let plutoRotation = 0;
 
 // light
-const sunLight = new THREE.PointLight(0xffffff, 40, 100, 2); // color, intensity, distance, decay
+const sunLight = new THREE.PointLight(0xffffff, 30, 0, 2); // color, intensity, distance, decay
 sunLight.position.copy(sunGroup.position); // At Sun’s center
 scene.add(sunLight);
 
