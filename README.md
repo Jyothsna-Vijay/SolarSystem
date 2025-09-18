@@ -4,7 +4,7 @@
 
 # Description
 
-An interactive 3D Solar System simulation built using THREE.js and JavaScript. Users are able to view the planets orbiting the sun in real time, with approxmimate scaling of planet sizes, speeds (rotational and orbital) and hierarchical motion of moons. The project demonstrates real-time animation, hierarchical transformations, vector math, and efficient rendering of thousands of asteroids in a browser environment.
+An interactive 3D Solar System simulation built using THREE.js and JavaScript. Users are able to view the planets orbiting the sun in real time, with approxmimate scaling of planet sizes, speeds (rotational and orbital) and hierarchical motion of moons. The project demonstrates real-time animation, hierarchical transformations, vector maths, and efficient rendering of thousands of asteroids in a browser environment.
 
 Includes individual renderings of each celestial body, excluding the asteroid belt. Users can view each planet up close and toggle its size and orbital speed.
 
