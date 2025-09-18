@@ -8,6 +8,11 @@ import getVenus from './venusexpo.js';
 import getEarth from './earthexpo.js';
 import getMoon from './moonexpo.js';
 import getMars from './marsexpo.js';
+import getJupiter from './jupiterexpo.js';
+import getSaturn from './saturnexpo.js';
+import getUranus from './uranusexpo.js';
+import getNeptune from './neptuneexpo.js';
+import getPluto from './plutoexpo.js';
 
 const w = window.innerWidth;
 const h = window.innerHeight;
@@ -33,7 +38,7 @@ function getOrbit(radius) {
 }
 
 // Add stars
-const stars = getStarfield({ numStars: 10000 });
+const stars = getStarfield({ numStars: 30000 });
 scene.add(stars);
 
 // Create the Sun
@@ -76,10 +81,13 @@ function getAstriodBelt({innerRadius = 20,
     count  = 2000,} = {}) 
 {
     const geometry = new THREE.IcosahedronGeometry(0.05, 0); // Small spheres for asteroids
-    const material = new THREE.MeshStandardMaterial({ color: 0xC0C0C0 }); // 0xa0522d
+    const material = new THREE.MeshStandardMaterial({ color: 0xffffff }); 
+  
 
     const belt = new THREE.InstancedMesh(geometry, material, count);
     const dummy = new THREE.Object3D(); // Temporary helper object for positioning
+    const color = new THREE.Color();
+    const colors = [0x7B3F00, 0xCD853F, 0x555555, 0x808080, 0xB0E0E6]; // Brown, LightBrown, Gray, LightGray, LightBlue
 
     const asteroidData = []; // Store orbit information for each asteroid
 
@@ -89,21 +97,26 @@ function getAstriodBelt({innerRadius = 20,
         const y = (Math.random() - 0.5) * 2; // Random height for thickness
         //const speed = 0.001 + Math.random() * 0.003; // Random speed for each asteroid
 
-        asteroidData.push({ angle, radius, y, speed: 1 + Math.random() * 0.003 }); // speed: orbit 
+        asteroidData.push({ angle, radius, y, speed: 0.0001 + Math.random() * 0.003 }); // speed: orbit 
 
         dummy.position.set(radius * Math.cos(angle), y, radius * Math.sin(angle)); // Position in circular belt
         dummy.updateMatrix();
         belt.setMatrixAt(i, dummy.matrix);
+
+        color.setHex(colors[Math.floor(Math.random() * colors.length)]);
+        belt.setColorAt(i, color);
     }
     belt.userData.asteroidData = asteroidData; // How each asteroid should move over time
     belt.userData.dummy = dummy; // Attach dummy for reuse
 
     return belt;
 }
-
-const asteroidBelt = getAstriodBelt({innerRadius:13, outerRadius:15, count:2000});
+const asteroidBelt = getAstriodBelt({innerRadius:11.8, outerRadius:14, count:2200});
 scene.add(asteroidBelt);
-
+const asteroidBelt2 = getAstriodBelt({innerRadius:13, outerRadius:15, count:500});
+scene.add(asteroidBelt2);
+const asteroidBelt3 = getAstriodBelt({innerRadius:15, outerRadius:16, count:100});
+scene.add(asteroidBelt3);
 //scene.add(getOrbit(13));
 
 function animateAsteroidBelt(belt) {
@@ -127,7 +140,37 @@ function animateAsteroidBelt(belt) {
     });
   
     belt.instanceMatrix.needsUpdate = true;
-  }
+}
+
+// Create Jupiter
+const { group: jupiterGroup, meshes: { jupiterMesh, jglowMesh } } = getJupiter();
+jupiterGroup.position.x = 18; // Move Jupiter away from the Sun
+scene.add(jupiterGroup, getOrbit(18));
+let jupiterRotation = 0;
+
+// Create Saturn
+const { group: saturnGroup, meshes: { saturnMesh, sglowMesh, sringMesh } } = getSaturn();
+saturnGroup.position.x = -25; // Move Saturn away from the Sun
+scene.add(saturnGroup, getOrbit(25));
+let saturnRotation = 0;
+
+// Create Uranus
+const { group: uranusGroup, meshes: { uranusMesh, uglowMesh, uringMesh } } = getUranus();
+uranusGroup.position.x = 30; // Move Uranus away from the Sun
+scene.add(uranusGroup, getOrbit(30));
+let uranusRotation = 0;
+
+// Create Neptune
+const { group: neptuneGroup, meshes: { neptuneMesh, nglowMesh } } = getNeptune();
+neptuneGroup.position.x = -35; // Move Neptune away from the Sun
+scene.add(neptuneGroup, getOrbit(35));
+let neptuneRotation = 0;
+
+// Create Pluto
+const { group: plutoGroup, meshes: { plutoMesh, pglowMesh } } = getPluto();
+plutoGroup.position.x = 48; // Move Pluto away from the Sun
+scene.add(plutoGroup, getOrbit(48));
+let plutoRotation = 0;
 
 // light
 const sunLight = new THREE.PointLight(0xffffff, 40, 100, 2); // color, intensity, distance, decay
@@ -180,7 +223,45 @@ function animate() {
 
     // Animate Asteroid Belt
     animateAsteroidBelt(asteroidBelt);
+    animateAsteroidBelt(asteroidBelt2);
+    animateAsteroidBelt(asteroidBelt3);
 
+    // Rotate Jupiter
+    jupiterMesh.rotation.y += 0.0084;
+
+    jupiterRotation += 0.00042; // Jupiter orbit speed
+    jupiterGroup.position.x = 18 * Math.cos(jupiterRotation);
+    jupiterGroup.position.z = 18 * Math.sin(jupiterRotation);
+
+    // Rotate Saturn
+    saturnMesh.rotation.y += 0.002;
+
+    saturnRotation += 0.00017; // Saturn orbit speed
+    saturnGroup.position.x = -25 * Math.cos(saturnRotation);
+    saturnGroup.position.z = -25 * Math.sin(saturnRotation);
+    sringMesh.rotation.y += 0.003;
+
+    // Rotate Uranus
+    uranusMesh.rotation.y += -0.011;
+
+    uranusRotation += 0.00006; // Uranus orbit speed
+    uranusGroup.position.x = 30 * Math.cos(uranusRotation);
+    uranusGroup.position.z = 30 * Math.sin(uranusRotation);
+    uringMesh.rotation.y += 0.002;
+
+    // Rotate Neptune
+    neptuneMesh.rotation.y += 0.006;
+
+    neptuneRotation += 0.00003; // Neptune orbit speed
+    neptuneGroup.position.x = -35 * Math.cos(neptuneRotation);
+    neptuneGroup.position.z = -35 * Math.sin(neptuneRotation);
+
+    // Rotate Pluto
+    plutoMesh.rotation.y += -0.004;
+
+    plutoRotation += 0.00002; // Pluto orbit speed
+    plutoGroup.position.x = 48 * Math.cos(plutoRotation);
+    plutoGroup.position.z = 48 * Math.sin(plutoRotation);
 
     // Rotate starfield
     stars.rotation.y -= 0.0002;
